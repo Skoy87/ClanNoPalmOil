@@ -7,12 +7,11 @@ import calendar
 import datetime
 import xlsxwriter
 import csv
-pd.set_option('display.max_rows', -1)
-
-mykey='b0cab65a56f141d28fb04a4ee29aa8f10230573afbb149f3a6bbf160a68de0a7'
+mykey='insert private API key'
 headers = {
     'auth': mykey
 }
+
 def getPlayersUrl(players):
     list_url = []
     for player in players:
@@ -31,6 +30,17 @@ def getDataFromUrl(players):
         response = requests.request('GET', url_list[i], headers=headers)
         data[i] = response.json()
     return data
+#df=pd.DataFrame(dict([(k,pd.Series (v)) for k,v in data.items()]))
+#print(df)
+
+'''
+urlclan='https://api.royaleapi.com/clan/2GRV8JVY'
+responseclan  = requests.request('GET', urlclan, headers=headers)
+dataclan=responseclan.json()
+'''
+
+
+
 
 def getDFfromDict(d):
     newDf = pd.DataFrame()
@@ -47,6 +57,11 @@ def getDFfromDict(d):
                 newDf = newDf.append({k : v}, ignore_index=True)
     return newDf
 
+'''
+clanGetValues=getDFfromDict(dataclan)
+print(clanGetValues)
+'''
+
 def getValues(newDf, lindx):
     validvalues = []
     for i in lindx:
@@ -57,12 +72,19 @@ def getValues(newDf, lindx):
         # print (validvalues)
         #finaldf=finaldf.append(validvalues)
     return validvalues
+'''
+lindx = ['members']
+validateClanValues=getValues(clanGetValues, lindx)
+print(validateClanValues)
+'''
 
 def getPlayerDF(data, lindx):
     newDf=getDFfromDict(data)
     startdf = pd.DataFrame(index=list(lindx))
     finalDF=startdf.assign(Valori = getValues(newDf,lindx))
     return finalDF
+
+#print (getPlayerDF(data))
 
 def getAllPlayers(data, players,lindx):
 
@@ -82,39 +104,4 @@ def pipeline():
     return allPlayersDf
 
 final = pipeline()
-#print(final)
-
-
-#Get clan data as list
-urlclan='https://api.royaleapi.com/clan/2GRV8JVY'
-responseclan  = requests.request('GET', urlclan, headers=headers)
-dataclan=responseclan.json()
-
-def getClanData(dataclan):
-    clanGetValues=getDFfromDict(dataclan)
-    #print(clanGetValues)
-    clanMembersList = clanGetValues['members'][clanGetValues['members'].first_valid_index()]
-    return clanMembersList
-
-# print (getClanData(dataclan))
-
-def getPlayerStatsFromClan(dataclan):
-    lindx = ['name','tag', 'trophies', 'donations', 'donationsReceived', 'donationsDelta']
-    #print(clanMembersList)
-    startdf = pd.DataFrame()
-    for player in getClanData(dataclan):
-        finalDF=getPlayerDF(player,lindx)
-        #finalDF=finalDF.append(finalDF[i])
-        startdf=startdf.append(other=finalDF)
-        #print(startdf)
-    return startdf
-getPlayerStatsFromClan(dataclan)
-print (getPlayerStatsFromClan(dataclan))
-    #print (startdf)
-
-# csvClan = getPlayerStatsFromClan(dataclan).to_csv()
-# writer = csv.writer(open("C:\Users\colizzaa\Desktop\ClanNoPalmOil-master\clan.csv", 'w'))
-# np.savetxt('data.csv', csvClan, delimiter=',')
-#
-
-
+print(final)
