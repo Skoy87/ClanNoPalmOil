@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import time
 font = {'family' : 'arial',
         'weight' : 'light',
         'size'   : 8}
@@ -10,7 +11,23 @@ dfToPlot=pd.read_csv(filepath_or_buffer='clan.csv')
 # print(dfToPlot)
 pivotedTrophies= dfToPlot.pivot(index='date', columns='name', values='trophies')
 #pivotedTrophies.plot(legend(loc=7, fontsize=8))
-print(pivotedTrophies.plot())
+#print (pivotedTrophies)
+#print(pivotedTrophies.plot())
+
+counter=0
+for column in pivotedTrophies:
+        plt.title(column)
+        plt.xlabel('Tempo')
+        plt.ylabel('Trofei')
+        plt.grid(True)
+        singlePlayerSeries = pivotedTrophies[column]
+        plt.plot(singlePlayerSeries)
+        counter+=1
+        print (counter)
+
+
+
+
 
 
 
