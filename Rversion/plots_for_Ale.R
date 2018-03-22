@@ -2,12 +2,12 @@
 # 1. source this file
 # 2. run the following lines:
 #    OUTPUT_DIR = 'plots/'
-#    PATH_TO_CLAN_CSV = '../clan_cleaned.csv'
+#    PATH_TO_CLAN_CSV = '../clan.csv'
 # 3. run plots_stats <- pipeline_plots(PATH_TO_CLAN_CSV=PATH_TO_CLAN_CSV,OUTPUT_DIR=OUTPUT_DIR)
 
 
 #OUTPUT_DIR = 'plots/'
-#PATH_TO_CLAN_CSV = '../clan_cleaned.csv'
+#PATH_TO_CLAN_CSV = '../clan.csv'
 
 pipeline_plots <- function(PATH_TO_CLAN_CSV, OUTPUT_DIR){
   load_pkgs()
