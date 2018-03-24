@@ -3,12 +3,35 @@ import numpy as np
 import json
 import pandas as pd
 import time
+from oauth2client.service_account import ServiceAccountCredentials
+import gspread
 import calendar
 import datetime
 # import xlsxwriter
 import csv
 # import timing
-originalDF=pd.read_csv(filepath_or_buffer='clan.csv')
+from io import StringIO
+
+scope = [
+    'https://spreadsheets.google.com/feeds',
+    'https://www.googleapis.com/auth/drive'
+]
+creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+client = gspread.authorize(creds)
+
+# sheet = client.open("clan").sheet1
+
+# originalDF=pd.read_csv(StringIO(sheet)) # , index_col=0,parse_dates=['Quradate'])
+
+gsheet = client.open("clan").sheet1
+print (gsheet)
+#wsheet = client.worksheet('clan')
+originalDF = pd.DataFrame(gsheet.get_all_records())
+# df = pd.read_csv(StringIO(data)
+
+
+
+#originalDF=pd.read_csv(filepath_or_buffer='clan.csv')
 print (originalDF)
 ts = time.gmtime()
 orario = time.strftime("%Y-%m-%d %H:%M:%S", ts)
@@ -86,3 +109,4 @@ def pipeline():
 
 updatedDF=originalDF.append(other=pipeline())
 updatedDF.to_csv(path_or_buf='clan.csv', index=False)
+copyToDrive = gspread.v4.Client.import_csv(self=client, file_id=gsheet.id ,data=updatedDF)
