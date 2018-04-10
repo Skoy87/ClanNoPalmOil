@@ -7,9 +7,8 @@ import calendar
 import datetime
 import xlsxwriter
 import csv
-mykey='insert private API key'
 headers = {
-    'auth': mykey
+    'auth': 'b0cab65a56f141d28fb04a4ee29aa8f10230573afbb149f3a6bbf160a68de0a7'
 }
 
 def getPlayersUrl(players):
@@ -23,7 +22,7 @@ def getDataFromUrl(players):
     #downloading API as .json
     url_list = getPlayersUrl(players)
     headers = {
-    'auth': mykey
+    'auth': 'b0cab65a56f141d28fb04a4ee29aa8f10230573afbb149f3a6bbf160a68de0a7'
     }
     data = [dict() for x in range(0,len(url_list))]
     for i in range(0,len(url_list)):
@@ -32,12 +31,10 @@ def getDataFromUrl(players):
     return data
 #df=pd.DataFrame(dict([(k,pd.Series (v)) for k,v in data.items()]))
 #print(df)
-
-'''
 urlclan='https://api.royaleapi.com/clan/2GRV8JVY'
 responseclan  = requests.request('GET', urlclan, headers=headers)
 dataclan=responseclan.json()
-'''
+
 
 
 
@@ -57,10 +54,9 @@ def getDFfromDict(d):
                 newDf = newDf.append({k : v}, ignore_index=True)
     return newDf
 
-'''
+
 clanGetValues=getDFfromDict(dataclan)
 print(clanGetValues)
-'''
 
 def getValues(newDf, lindx):
     validvalues = []
@@ -72,11 +68,10 @@ def getValues(newDf, lindx):
         # print (validvalues)
         #finaldf=finaldf.append(validvalues)
     return validvalues
-'''
 lindx = ['members']
-validateClanValues=getValues(clanGetValues, lindx)
-print(validateClanValues)
-'''
+validClanValues=getValues(clanGetValues, lindx)
+
+#print(validClanValues)
 
 def getPlayerDF(data, lindx):
     newDf=getDFfromDict(data)
@@ -104,4 +99,4 @@ def pipeline():
     return allPlayersDf
 
 final = pipeline()
-print(final)
+#print(final)
