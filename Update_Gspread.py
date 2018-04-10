@@ -1,17 +1,18 @@
 import requests
-import numpy as np
-import json
+#import numpy as np
+#import json
 import pandas as pd
 import time
 from oauth2client.service_account import ServiceAccountCredentials
 import gspread
 from gspread_pandas import Spread
-import calendar
-import datetime
+#import calendar
+import datetime as dt
 # import xlsxwriter
-import csv
+#import csv
 # import timing
-from io import StringIO
+#from io import StringIO
+#import schedule
 
 # Visualisation and time settings
 ts = time.gmtime()
@@ -84,17 +85,29 @@ def getPlayersStatList(playersStatList):
 
 
 def pipeline():
+    #print ('step 1')
     dataclanJson=getClanJson(myKey, clanTag)
+    #print ('step 2')
     clanMatrix=getDFfromJson(dataclanJson)
+    #print ('step 3')
     playersInfo=getValues(clanMatrix, members)
+    #print ('step 4')
     playersStatList = playersInfo[0]
+    #print ('step 5')
     playersDF=getPlayersStatList(playersStatList)
+    #print ('step 6')
     print (playersDF)
     return playersDF
 
 # Update csv on google sheets
-updatedDF=originalDF.append(other=pipeline())
-spread = Spread('skoy87@clannopalmoil.iam.gserviceaccount.com', 'clan')
-spread.df_to_sheet(updatedDF, index=False, sheet='clan', start='A1', replace=True)
 
-# Is this script gets stuck, refresh the web spreadsheet page
+
+def job():
+    print('Updating the clan DataFrame...')
+    updatedDF = originalDF.append(other=pipeline())
+    #updatedDF.to_csv('clan ' + orario)
+    spread = Spread('skoy87@clannopalmoil.iam.gserviceaccount.com', 'clan')
+    spread.df_to_sheet(updatedDF, index=False, sheet='clan', start='A1', replace=True)
+    return updatedDF
+
+rawDF=job()
