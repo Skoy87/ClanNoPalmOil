@@ -10,7 +10,7 @@ import calendar
 import datetime
 # import xlsxwriter
 import csv
-# import timing
+import timing
 from io import StringIO
 import schedule
 
@@ -102,7 +102,9 @@ def job():
     spread = Spread('skoy87@clannopalmoil.iam.gserviceaccount.com', 'clan')
     spread.df_to_sheet(updatedDF, index=False, sheet='clan', start='A1', replace=True)
 # Is this script gets stuck, refresh the web spreadsheet page
-schedule.every().day.at("16:44").do(job)
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+schedule.every().day.at("17:40").do(job)
+job()
+
+# while True:
+#     schedule.run_pending()
+#     time.sleep(1)
