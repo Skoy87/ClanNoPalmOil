@@ -10,8 +10,9 @@ import calendar
 import datetime
 # import xlsxwriter
 import csv
-# import timing
+import timing
 from io import StringIO
+import schedule
 
 # Visualisation and time settings
 ts = time.gmtime()
@@ -93,8 +94,17 @@ def pipeline():
     return playersDF
 
 # Update csv on google sheets
-updatedDF=originalDF.append(other=pipeline())
-spread = Spread('skoy87@clannopalmoil.iam.gserviceaccount.com', 'clan')
-spread.df_to_sheet(updatedDF, index=False, sheet='clan', start='A1', replace=True)
 
+
+def job():
+    print('Updating the clan DataFrame...')
+    updatedDF = originalDF.append(other=pipeline())
+    spread = Spread('skoy87@clannopalmoil.iam.gserviceaccount.com', 'clan')
+    spread.df_to_sheet(updatedDF, index=False, sheet='clan', start='A1', replace=True)
 # Is this script gets stuck, refresh the web spreadsheet page
+schedule.every().day.at("17:40").do(job)
+job()
+
+# while True:
+#     schedule.run_pending()
+#     time.sleep(1)
